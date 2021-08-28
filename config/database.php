@@ -2,6 +2,20 @@
 
 use Illuminate\Support\Str;
 
+$DATABASE_URL = env('DATABASE_URL', null);
+if (!empty($DATABASE_URL)) {
+    $DB_DETAILS = parse_url($DATABASE_URL);
+    $scheme = $DB_DETAILS['scheme'];
+    $scheme = ($scheme == 'postgres') ? 'pgsql' : $scheme ;
+    putenv('DB_CONNECTION=' . $scheme);
+    putenv('DB_HOST=' .  $DB_DETAILS['host']);
+    if (!empty($DB_DETAILS['port']))
+        putenv('DB_PORT=' .  $DB_DETAILS['port']);
+    putenv('DB_USERNAME=' .  $DB_DETAILS['user']);
+    putenv('DB_PASSWORD=' .  $DB_DETAILS['pass']);
+    putenv('DB_DATABASE=' .  ltrim($DB_DETAILS['path'], '/'));
+}
+
 return [
 
     /*

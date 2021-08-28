@@ -35,15 +35,15 @@ return [
     */
 
     'channels' => [
+        // change error driver to allow heroku logging
+        // ref: https://devcenter.heroku.com/articles/getting-started-with-laravel#changing-the-log-destination-for-production
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],
-            'ignore_exceptions' => false,
         ],
 
         'single' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
+            'driver' => 'errorlog',
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
