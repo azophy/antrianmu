@@ -1,0 +1,13 @@
+deploy-develop-heroku:
+  stage: build
+  only:
+    - develop
+  script:
+    - git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_DEVELOP.git HEAD:master -f
+
+deploy-master-heroku:
+  stage: build
+  only:
+    - master
+  script:
+    - git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_PRODUCTION.git HEAD:master -f
