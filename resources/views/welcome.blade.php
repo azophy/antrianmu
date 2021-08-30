@@ -23,13 +23,14 @@
     <body class="antialiased">
         <div style="max-width: 800px; margin:auto; padding: 5px">
         <h1>Welcome to {{ config('app.name') }}</h1>
-        <p>{{ config('app.name') }} adalah aplikasi antrian online yang simpel dan mudah digunakan. Bisa digunakan untuk antrian perbankan, rumah sakit, instansi pemerintah, dll. Coba gratis sekarang! Tidak perlu registrasi!</p>
+        <p>{{ config('app.name') }} adalah aplikasi antrian online yang simpel dan mudah digunakan. Bisa digunakan untuk antrian perbankan, rumah sakit, instansi pemerintah, dll. Coba gratis sekarang! Tidak perlu registrasi! Tidak perlu install aplikasi atau beli alat!</p>
         <p>Aplikasi ini ditujukan untuk 2 jenis pengguna: untuk "penyedia" yang menyediakan layanan dan mengadakan antrian, serta "pengunjung" yang akan mengambil nomor antrian.</p>
         <p>Untuk "penyedia", pertama buat antrian baru dengan mengisikan nama antrian di isian di bawah. Setelah itu anda akan mendapatkan 2 buah tautan, 1 untuk "penyedia" serta 1 untuk "pengunjung". Selain itu anda akan mendapatkan kode keamanan sementara, yang berguna untuk membuka kunci di tautan "penyedia". Ketika anda membuka tautan untuk "penyedia" dan mengisikan kode keamanan yang diberikan, anda akan masuk ke menu "pengaturan". Di sana anda bisa mengisikan informasi seperti "Nama lembaga penyedia" serta "Nama antrian".</p>
         <p>Adapun tautan "pengunjung" bisa anda berikan ke setiap pelanggan anda yang datang. Anda bisa mem-print tautan tersebut atau menampilkan QR Code yang bisa di scan oleh pengunjung. Di tautan tersebut pengunjung bisa melihat informasi jumlah & status antrian saat ini, serta bisa mengambil nomor antrian. Ketika pengunjung mengambil nomor antrian, pengunjung akan mendapatkan "tiket" berupa sebuah link tiket yang bisa disimpan oleh pengunjung. Tiket tersebut juga dapat dicetak jika dikehendaki, sebagai bukti fisik nomor antrian yang dimiliki pengunjung.</p>
 
         <h3>Buat antrian baru</h3>
         <form method="post" action="{{ route('queue.create') }}">
+            @csrf
             {{config('app.url')}}/ <input type="text" name="slug">
             <button type="submit">Buat sekarang</button>
         </form>

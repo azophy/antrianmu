@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Queue extends Model
 {
@@ -26,8 +27,14 @@ class Queue extends Model
         'meta',
     ];
 
-    public $cast = [
-        'meta' => 'json',
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'meta' => 'array',
+        'valid_until' => 'datetime',
     ];
 
     /**
@@ -37,6 +44,9 @@ class Queue extends Model
      */
     protected $attributes = [
         'type' => self::TYPE_FREE,
+        'ticket_current' => 0,
+        'ticket_last' => 0,
+        'ticket_limit' => 50,
     ];
 
     static function generateSecretCode()

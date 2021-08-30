@@ -11,16 +11,24 @@ class QueueController extends Controller
 {
     public function create(Request $request)
     {
+        $request->validate([
+            'slug' => [ 'required', 'regex:/^[a-zA-Z0-9_-]*$/' ],
+        ]);
+
+        $slug = strtolower($request->slug);
+
         if (Queue::where([
-            [ 'slug', '=', $request->slug, ],
-            [ 'valid_until', '<=' , Carbon::today(), ],
+            [ 'slug', '=', $slug ],
+            [ 'valid_until', '<=' , Carbon::today() ],
         ])->exists()) {
             return 'maaf antrian dengan nama ini sudah ada';
         }
 
         $newQueue = Queue::create([
-            'slug' => $request->slug,
+            'slug' => $slug,
             'secret_code' => Queue::generateSecretCode(),
+            'title' => $slug,
+            'valid_until' => Carbon::now()->addHours(24),
         ]);
 
         return redirect()->route('admin.setting', [ $newQueue->slug ]);
@@ -28,9 +36,11 @@ class QueueController extends Controller
 
     public function adminSetting($slug)
     {
+        $slug = strtolower($slug);
+
         $queue = Queue::where([
             ['slug', '=', $slug ],
-            [ 'valid_until', '<=' , Carbon::today() ],
+            [ 'valid_until', '<=' , Carbon::now() ],
         ])->first();
 
         if (empty($queue)) {
