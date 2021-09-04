@@ -6,7 +6,6 @@
     <h1 class="title">Selamat datang di {{ config('app.name') }}</h1>
     <p class="content is-size-6">Lindungi pengunjung usaha anda dari ancaman covid-19 . Gunakan sistem antrian berbasis online yang tanpa kontak, dan membantu mereka untuk tidak berkerumun. Coba gratis sekarang! Tidak perlu registrasi! Tidak perlu install aplikasi atau beli alat!</p>
 
-    <h3>Buat antrian baru</h3>
     <form class="box" method="post" action="{{ route('queue.create') }}">
       @csrf
 
