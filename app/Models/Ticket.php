@@ -28,15 +28,21 @@ class Ticket extends Model
         return $this->belongsTo(Queue::class);
     }
 
+    static function findByCodeQuery($code)
+    {
+        return self::where('secret_code', $code )
+                ->whereRelation('queue', 'valid_until', '>=' , Carbon::now())
+                ;
+
+    }
+
     /* generate new usable secret code */
     static function generateSecretCode():string
     {
         do {
             $newCode = Helper::generateSecretCode();
         } while (
-            self::where('secret_code', $newCode )
-                ->whereRelation('queue', 'valid_until', '>=' , Carbon::now())
-                ->exists()
+            self::findByCodeQuery($newCode)->exists()
         );
 
         return $newCode;

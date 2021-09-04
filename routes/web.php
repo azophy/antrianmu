@@ -19,11 +19,11 @@ Route::get('/', function () {
 
 Route::post('/queue', 'App\Http\Controllers\QueueController@create')->name('queue.create');
 
-Route::get('/{slug}/admin/setting', 'App\Http\Controllers\QueueController@adminSetting')->name('admin.setting');
-Route::get('/{slug}/admin/counter', 'App\Http\Controllers\QueueController@adminCounter');
+Route::get('/{slug}/admin/', 'App\Http\Controllers\QueueController@adminSetting')->name('admin.setting');
+Route::get('/{slug}/admin/counter', 'App\Http\Controllers\QueueController@adminCounter')->name('admin.counter');
 Route::post('/{slug}/admin/next', 'App\Http\Controllers\QueueController@adminNext');
 
-Route::get('/{slug}/', 'App\Http\Controllers\QueueController@guestCounter');
+Route::get('/{slug}/', 'App\Http\Controllers\QueueController@guestCounter')->name('guest.counter');
 Route::post('/{slug}/add', 'App\Http\Controllers\QueueController@guestAdd')->name('guest.add');
 
 Route::get('/tiket/{code}', 'App\Http\Controllers\TicketController@view')->name('ticket.view');

@@ -18,20 +18,16 @@ class QueueController extends Controller
 
         $newQueue = Queue::createBySlug($request->slug);
 
-        return redirect()->route('admin.setting', [ $newQueue->slug ]);
+        return redirect()
+            ->route('admin.setting', [ $newQueue->slug ])
+            ->with('new', true);
     }
 
     public function adminSetting($slug)
     {
         $queue = Queue::findBySlugOrFail($slug);
 
-        return response()->json([
-            'judul' => $queue->title,
-            'kode rahasia' => $queue->secret_code,
-            'Nomor antrian saat ini' => $queue->ticket_current,
-            'Nomor antrian terakhir' => $queue->ticket_last,
-            'Batas nomor antrian hari ini' => $queue->ticket_limit,
-        ]);
+        return view('queue.admin_setting', compact('queue'));
     }
 
     public function adminCounter()
@@ -46,7 +42,7 @@ class QueueController extends Controller
     {
         $queue = Queue::findBySlugOrFail($slug);
 
-        return view('queue.guest_counter', $queue->getOriginal());
+        return view('queue.guest_counter', compact('queue'));
     }
 
     public function guestAdd($slug, Request $request)
@@ -66,17 +62,8 @@ class QueueController extends Controller
             'secret_code' => Ticket::generateSecretCode(),
         ]);
 
-        return response()->json([
-            'judul' => $queue->title,
-            'kode rahasia' => $queue->secret_code,
-            'Nomor antrian saat ini' => $queue->ticket_current,
-            'Nomor antrian terakhir' => $queue->ticket_last,
-            'Batas nomor antrian hari ini' => $queue->ticket_limit,
-            'ticket' => [
-                'id' => $ticket->id,
-                'order' => $ticket->order,
-                'secret_code' => $ticket->secret_code,
-            ],
+        return redirect()->route('ticket.view', [
+            'code' => $ticket->secret_code,
         ]);
     }
 }
