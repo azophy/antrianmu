@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 use App\Models\Queue;
+use App\Models\Ticket;
 
 class QueueController extends Controller
 {
@@ -15,37 +16,14 @@ class QueueController extends Controller
             'slug' => [ 'required', 'regex:/^[a-zA-Z0-9_-]*$/' ],
         ]);
 
-        $slug = strtolower($request->slug);
-
-        if (Queue::where([
-            [ 'slug', '=', $slug ],
-            [ 'valid_until', '<=' , Carbon::today() ],
-        ])->exists()) {
-            return 'maaf antrian dengan nama ini sudah ada';
-        }
-
-        $newQueue = Queue::create([
-            'slug' => $slug,
-            'secret_code' => Queue::generateSecretCode(),
-            'title' => $slug,
-            'valid_until' => Carbon::now()->addHours(24),
-        ]);
+        $newQueue = Queue::createBySlug($request->slug);
 
         return redirect()->route('admin.setting', [ $newQueue->slug ]);
     }
 
     public function adminSetting($slug)
     {
-        $slug = strtolower($slug);
-
-        $queue = Queue::where([
-            ['slug', '=', $slug ],
-            [ 'valid_until', '<=' , Carbon::now() ],
-        ])->first();
-
-        if (empty($queue)) {
-            return 'Maaf antrian dengan nama ini tidak ditemukan';
-        }
+        $queue = Queue::findBySlugOrFail($slug);
 
         return response()->json([
             'judul' => $queue->title,
@@ -66,21 +44,39 @@ class QueueController extends Controller
 
     public function guestCounter($slug)
     {
-        $slug = strtolower($slug);
-
-        $queue = Queue::where([
-            ['slug', '=', $slug ],
-            [ 'valid_until', '<=' , Carbon::now() ],
-        ])->first();
-
-        if (empty($queue)) {
-            return 'Maaf antrian dengan nama ini tidak ditemukan';
-        }
+        $queue = Queue::findBySlugOrFail($slug);
 
         return view('queue.guest_counter', $queue->getOriginal());
     }
 
-    public function guestAdd(Request $request)
+    public function guestAdd($slug, Request $request)
     {
+        $queue = Queue::findBySlugOrFail($slug);
+
+        if ($queue->ticket_last >= $queue->ticket_limit) {
+            abort(404, 'Maaf, nomor antrian hari ini sudah habis');
+        }
+
+        $queue->ticket_last++;
+        $queue->save();
+
+        $ticket = Ticket::create([
+            'queue_id' => $queue->id,
+            'order' => $queue->ticket_last,
+            'secret_code' => Ticket::generateSecretCode(),
+        ]);
+
+        return response()->json([
+            'judul' => $queue->title,
+            'kode rahasia' => $queue->secret_code,
+            'Nomor antrian saat ini' => $queue->ticket_current,
+            'Nomor antrian terakhir' => $queue->ticket_last,
+            'Batas nomor antrian hari ini' => $queue->ticket_limit,
+            'ticket' => [
+                'id' => $ticket->id,
+                'order' => $ticket->order,
+                'secret_code' => $ticket->secret_code,
+            ],
+        ]);
     }
 }

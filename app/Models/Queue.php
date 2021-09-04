@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
+
+use App\Models\Ticket;
+use App\GenericHelper as Helper;
 
 class Queue extends Model
 {
@@ -49,17 +52,56 @@ class Queue extends Model
         'ticket_limit' => 50,
     ];
 
-    static function generateSecretCode()
+    public function tickets()
     {
-        $codeLength = 6;
-        $chars = 'abcdefghjkmnprtuwxy0123456789';
-        $numChars = strlen($chars);
-        $newRandomInt = random_int(0, $numChars ** $codeLength);
+        return $this->hasMany(Ticket::class);
+    }
 
-        $newStr = '';
-        for ($i=0;$i<$codeLength;$i++)
-            $newStr .= $chars[random_int(0, $numChars-1)];
+    static function findBySlugQuery($slug)
+    {
+        return self::where([
+            ['slug', '=', strtolower($slug) ],
+            [ 'valid_until', '>=' , Carbon::now() ],
+        ]);
+    }
 
-        return $newStr;
+    static function findBySlugOrFail($slug)
+    {
+        $queue = self::findBySlugQuery($slug)->first();
+
+        if (empty($queue)) {
+            abort(404, "Maaf antrian dengan nama '$slug' tidak ditemukan");
+        }
+
+        return $queue;
+    }
+
+    static function createBySlug($slug)
+    {
+        if (Queue::findBySlugQuery($slug)->exists()) {
+            abort(400, "maaf antrian dengan nama '$slug' sudah ada");
+        }
+
+        return self::create([
+            'slug' => strtolower($slug),
+            'secret_code' => self::generateSecretCode(),
+            'title' => $slug,
+            'valid_until' => Carbon::now()->addHours(24),
+        ]);
+    }
+
+    /* generate new usable secret code */
+    static function generateSecretCode():string
+    {
+        do {
+            $newCode = Helper::generateSecretCode();
+        } while (
+            self::where([
+                ['secret_code', '=', $newCode ],
+                [ 'valid_until', '>=' , Carbon::now() ],
+            ])->exists()
+        );
+
+        return $newCode;
     }
 }

@@ -23,7 +23,7 @@ class CreateQueuesTable extends Migration
             $table->integer('ticket_current')->nullable();
             $table->integer('ticket_last')->nullable();
             $table->integer('ticket_limit')->nullable();
-            $table->time('valid_until')->nullable();
+            $table->datetime('valid_until')->nullable();
             $table->json('meta')->nullable();
             $table->timestamps();
         });
