@@ -64,11 +64,23 @@ class QueueController extends Controller
     {
     }
 
-    public function guestCounter()
+    public function guestCounter($slug)
     {
+        $slug = strtolower($slug);
+
+        $queue = Queue::where([
+            ['slug', '=', $slug ],
+            [ 'valid_until', '<=' , Carbon::now() ],
+        ])->first();
+
+        if (empty($queue)) {
+            return 'Maaf antrian dengan nama ini tidak ditemukan';
+        }
+
+        return view('queue.guest_counter', $queue->getOriginal());
     }
 
-    public function guestAdd()
+    public function guestAdd(Request $request)
     {
     }
 }

@@ -24,6 +24,6 @@ Route::get('/{slug}/admin/counter', 'App\Http\Controllers\QueueController@adminC
 Route::post('/{slug}/admin/next', 'App\Http\Controllers\QueueController@adminNext');
 
 Route::get('/{slug}/', 'App\Http\Controllers\QueueController@guestCounter');
-Route::post('/{slug}/add', 'App\Http\Controllers\QueueController@guestAdd');
+Route::post('/{slug}/add', 'App\Http\Controllers\QueueController@guestAdd')->name('guest.add');
 
 Route::get('/tiket/{code}', 'App\Http\Controllers\QueueController@view')->name('ticket.view');
