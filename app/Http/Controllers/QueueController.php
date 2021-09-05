@@ -19,9 +19,33 @@ class QueueController extends Controller
 
         $newQueue = Queue::createBySlug($request->slug);
 
+        $sessionKey = Queue::generateSessionKey($slug);
+        session([ $sessionKey => $queue->valid_until ]);
+
         return redirect()
             ->route('admin.setting', [ $newQueue->slug ])
             ->with('new', true);
+    }
+
+    public function adminLogin($slug, Request $request)
+    {
+        $queue = Queue::findBySlugOrFail($slug);
+
+        $request->validate([
+            'g-recaptcha-response' => 'required|captcha',
+            'secret_code' => 'required',
+        ]);
+
+        if (!hash_compare($queue->secret_code, $request->secret_code)) {
+            abort('401', 'Secret code mismatch');
+        }
+
+        $sessionKey = Queue::generateSessionKey($slug);
+        session([ $sessionKey => $queue->valid_until ]);
+
+        return redirect()
+            ->route('admin.setting', [ $newQueue->slug ])
+            ;
     }
 
     public function adminSetting($slug)

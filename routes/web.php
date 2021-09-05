@@ -19,9 +19,13 @@ Route::get('/', function () {
 
 Route::post('/queue', 'App\Http\Controllers\QueueController@create')->name('queue.create');
 
-Route::get('/{slug}/admin/', 'App\Http\Controllers\QueueController@adminCounter')->name('admin.counter');
-Route::get('/{slug}/admin/setting', 'App\Http\Controllers\QueueController@adminSetting')->name('admin.setting');
-Route::post('/{slug}/admin/next', 'App\Http\Controllers\QueueController@adminNext')->name('admin.next');
+Route::post('/{slug}/admin/login', 'App\Http\Controllers\QueueController@adminLogin')->name('admin.login');
+
+Route::group(function () {
+    Route::get('/{slug}/admin/', 'App\Http\Controllers\QueueController@adminCounter')->name('admin.counter');
+    Route::get('/{slug}/admin/setting', 'App\Http\Controllers\QueueController@adminSetting')->name('admin.setting');
+    Route::post('/{slug}/admin/next', 'App\Http\Controllers\QueueController@adminNext')->name('admin.next');
+})->middleware(App\Http\Middleware\QueueAdminValidation::class);
 
 Route::get('/{slug}/', 'App\Http\Controllers\QueueController@guestCounter')->name('guest.counter');
 Route::post('/{slug}/add', 'App\Http\Controllers\QueueController@guestAdd')->name('guest.add');

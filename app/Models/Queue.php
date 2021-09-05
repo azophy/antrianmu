@@ -90,7 +90,9 @@ class Queue extends Model
         ]);
     }
 
-    /* generate new usable secret code */
+    /* generate new usable secret code
+     * @return string
+     */
     static function generateSecretCode():string
     {
         do {
@@ -103,5 +105,14 @@ class Queue extends Model
         );
 
         return $newCode;
+    }
+
+    /* generate session key, used for session auth in Queue's Admin pages
+     * @return string
+     */
+    static function generateSessionKey($slug)
+    {
+        $slug = strtolower($slug);
+        return "queue_admin_expire.$slug";
     }
 }

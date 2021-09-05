@@ -201,4 +201,7 @@ return [
     /* lifetime (in minutes) used by ticket captcha session */
     'ticket_lifetime' => 30,
 
+    /* lifetime (in minutes) used by queue admin session */
+    'queue_admin_lifetime' => 6 * 60,
+
 ];
