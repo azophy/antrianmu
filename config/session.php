@@ -198,4 +198,7 @@ return [
 
     'same_site' => 'lax',
 
+    /* lifetime (in minutes) used by ticket captcha session */
+    'ticket_lifetime' => 30,
+
 ];

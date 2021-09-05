@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Models\Ticket;
@@ -20,10 +21,13 @@ class TicketController extends Controller
             $request->validate([
                 'g-recaptcha-response' => 'required|captcha',
             ]);
-            session([ "ticket_code.$code" => true ]);
+            session([ "ticket_code_expire.$code" => Carbon::now()->addMinutes(config('session.ticket_lifetime')) ]);
         }
 
-        if (!session("ticket_code.$code")) {
+        if (
+            !session("ticket_code_expire.$code") ||
+            session("ticket_code_expire.$code") < Carbon::now()
+        ) {
             return view('ticket.login', compact('code'));
         }
 

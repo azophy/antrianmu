@@ -16,7 +16,7 @@
   </div>
   @endif
 
-  <p>Mohon isikan form di bawah agar melihat tiket ini</p>
+  <p>Mohon isikan form di bawah terlebih dahulu agar dapat melihat tiket ini</p>
   <div class="field">
     <div class="control">
      {!! NoCaptcha::renderJs() !!}
