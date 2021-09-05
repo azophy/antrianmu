@@ -34,4 +34,36 @@ $admin_setting_url = route('admin.setting', ['slug' => $queue->slug ]);
   </strong></li>
 </ul>
 
+<h3 class="title is-3">Ubah setting antrian</h3>
+<form class="box" method="post" action="{{ route('admin.setting.update', [ $queue->slug ]) }}">
+  @csrf
+
+  @if ($errors->any())
+  <div class="notification is-danger">
+     <strong>Error!</strong> <br>
+     <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+     </ul>
+  </div>
+  @endif
+
+  <div class="field">
+    <label class="label">Judul Antrian</label>
+    <div class="control">
+      <input class="input" type="text" name="title" value="{{$queue->title}}">
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="label">Deskripsi</label>
+    <div class="control">
+      <textarea class="input" name="description" placeholder="beri paragraf penjelasan untuk halaman antrian anda">{{$queue->description}}</textarea>
+    </div>
+  </div>
+
+  <button typw="submit" class="button is-primary">Simpan</button>
+</form>
+
 @endsection

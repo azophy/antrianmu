@@ -4,6 +4,8 @@
 
 <h1 class="title">{{ $queue->title }}</h1>
 
+<p class="content is-normal">{{ $queue->description }}</p>
+
 <ul>
   <li>Nomor antrian saat ini: <strong>{{ $queue->ticket_current }}</strong></li>
   <li>Nomor antrian terakhir: <strong>{{ $queue->ticket_last }}</strong></li>

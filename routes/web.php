@@ -24,6 +24,7 @@ Route::post('/{slug}/admin/login', 'App\Http\Controllers\QueueController@adminLo
 Route::middleware(App\Http\Middleware\QueueAdminValidation::class)->group(function () {
     Route::get('/{slug}/admin/', 'App\Http\Controllers\QueueController@adminCounter')->name('admin.counter');
     Route::get('/{slug}/admin/setting', 'App\Http\Controllers\QueueController@adminSetting')->name('admin.setting');
+    Route::post('/{slug}/admin/setting', 'App\Http\Controllers\QueueController@adminSettingUpdate')->name('admin.setting.update');
     Route::post('/{slug}/admin/next', 'App\Http\Controllers\QueueController@adminNext')->name('admin.next');
 });
 

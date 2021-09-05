@@ -53,6 +53,19 @@ class QueueController extends Controller
         return view('queue.admin_setting', compact('queue'));
     }
 
+    public function adminSettingUpdate($slug, Request $request)
+    {
+        $queue = Queue::findBySlugOrFail($slug);
+
+        $queue->fill($request->only([
+            'title',
+            'description',
+        ]));
+        $queue->save();
+
+        return view('queue.admin_setting', compact('queue'));
+    }
+
     public function adminCounter($slug)
     {
         $queue = Queue::findBySlugOrFail($slug);
