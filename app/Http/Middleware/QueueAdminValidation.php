@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class QueueAdminValidation
@@ -16,6 +17,7 @@ class QueueAdminValidation
      */
     public function handle(Request $request, Closure $next)
     {
+        $slug = $request->route('slug');
         $sessionKey = \App\Models\Queue::generateSessionKey($slug);
 
         if (

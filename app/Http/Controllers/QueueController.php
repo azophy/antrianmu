@@ -19,8 +19,8 @@ class QueueController extends Controller
 
         $newQueue = Queue::createBySlug($request->slug);
 
-        $sessionKey = Queue::generateSessionKey($slug);
-        session([ $sessionKey => $queue->valid_until ]);
+        $sessionKey = Queue::generateSessionKey($newQueue->slug);
+        session([ $sessionKey => $newQueue->valid_until ]);
 
         return redirect()
             ->route('admin.setting', [ $newQueue->slug ])
@@ -36,16 +36,14 @@ class QueueController extends Controller
             'secret_code' => 'required',
         ]);
 
-        if (!hash_compare($queue->secret_code, $request->secret_code)) {
+        if (!hash_equals($queue->secret_code, $request->secret_code)) {
             abort('401', 'Secret code mismatch');
         }
 
         $sessionKey = Queue::generateSessionKey($slug);
         session([ $sessionKey => $queue->valid_until ]);
 
-        return redirect()
-            ->route('admin.setting', [ $newQueue->slug ])
-            ;
+        return redirect()->route('admin.setting', [ $queue->slug ]);
     }
 
     public function adminSetting($slug)
