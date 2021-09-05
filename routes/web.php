@@ -26,4 +26,6 @@ Route::post('/{slug}/admin/next', 'App\Http\Controllers\QueueController@adminNex
 Route::get('/{slug}/', 'App\Http\Controllers\QueueController@guestCounter')->name('guest.counter');
 Route::post('/{slug}/add', 'App\Http\Controllers\QueueController@guestAdd')->name('guest.add');
 
-Route::match(['get','post'], '/tiket/{code}', 'App\Http\Controllers\TicketController@view')->name('ticket.view');
+Route::match(['get','post'], '/tiket/{code}', 'App\Http\Controllers\TicketController@view')
+    ->name('ticket.view')
+    ->middleware('captcha_session_valid:ticket_code_expire');

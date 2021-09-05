@@ -2,7 +2,7 @@
 
 @section('content')
 
-<form class="box" method="post" action="{{ route('ticket.view', [ 'code' => $code ]) }}">
+<form class="box" method="post" action="{{ $target }}">
   @csrf
 
   @if ($errors->any())
