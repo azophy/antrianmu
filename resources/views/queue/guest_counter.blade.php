@@ -12,7 +12,7 @@
 
 <form action="{{ route('guest.add', [ 'slug' => $queue->slug ]) }}" method="post">
     @csrf
-    <button class="button is-medium is-info">Ambil nomor antrian baru</button>
+    <button class="button is-medium is-info" {{ ($queue->ticket_last >= $queue->ticket_limit) ? 'disabled' : '' }}>Ambil nomor antrian baru</button>
 </form>
 
 @endsection

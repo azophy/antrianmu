@@ -30,13 +30,27 @@ class QueueController extends Controller
         return view('queue.admin_setting', compact('queue'));
     }
 
-    public function adminCounter()
+    public function adminCounter($slug)
     {
+        $queue = Queue::findBySlugOrFail($slug);
+
+        return view('queue.admin_counter', compact('queue'));
     }
 
-    public function adminNext()
+    public function adminNext($slug)
     {
+        $queue = Queue::findBySlugOrFail($slug);
+
+        if ($queue->ticket_current >= $queue->ticket_last) {
+            abort(400, 'Sudah berada di ujung antrian');
+        }
+
+        $queue->ticket_current++;
+        $queue->save();
+
+        return redirect()->route('admin.counter', compact('slug'));
     }
+
 
     public function guestCounter($slug)
     {
