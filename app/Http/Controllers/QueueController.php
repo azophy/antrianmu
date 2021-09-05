@@ -14,6 +14,7 @@ class QueueController extends Controller
     {
         $request->validate([
             'slug' => [ 'required', 'regex:/^[a-zA-Z0-9_-]*$/' ],
+            'g-recaptcha-response' => 'required|captcha',
         ]);
 
         $newQueue = Queue::createBySlug($request->slug);

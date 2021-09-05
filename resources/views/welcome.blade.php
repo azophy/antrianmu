@@ -9,10 +9,28 @@
     <form class="box" method="post" action="{{ route('queue.create') }}">
       @csrf
 
+      @if ($errors->any())
+      <div class="notification is-danger">
+         <strong>Error!</strong> <br>
+         <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+         </ul>
+      </div>
+      @endif
+
       <div class="field">
         <label class="label">{{config('app.url')}}/</label>
         <div class="control">
           <input class="input" type="text" name="slug" placeholder="nama-antrian-baru-kamu">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="control">
+         {!! NoCaptcha::renderJs() !!}
+         {!! NoCaptcha::display() !!}
         </div>
       </div>
 
