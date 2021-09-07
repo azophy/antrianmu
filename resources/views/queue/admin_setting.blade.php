@@ -12,8 +12,25 @@ $admin_setting_url = route('admin.setting', ['slug' => $queue->slug ]);
 
 @if (session('new'))
 <div class="notification is-success">
-  Selamat! Antrian anda sudah berhasil dibuat!
-  Sekarang anda bisa memberikan tautan/link halaman antrian anda ke pengunjung anda.
+  <strong>
+      Selamat! Antrian anda sudah berhasil dibuat!
+  </strong>
+
+  <p>
+      Sekarang anda bisa memberikan tautan/link halaman antrian anda ke pengunjung anda. Beberapa tautan penting:
+  </p>
+
+  <ul>
+      <li>Tautan untuk antrian ini (untuk pengunjung): <strong>
+            <a target="_blank" href="{{ $guest_counter_url }}">{{ $guest_counter_url }}</a>
+      </strong></li>
+      <li>Tautan untuk halaman counter antrian ini (untuk penyedia layanan/pengelola): <strong>
+            <a href="{{ $admin_counter_url }}">{{ $admin_counter_url }}</a>
+      </strong></li>
+      <li>Tautan untuk halaman admin antrian ini (untuk penyedia layanan/pengelola): <strong>
+            <a href="{{ $admin_setting_url }}">{{ $admin_setting_url }}</a>
+      </strong></li>
+  </ul>
 </div>
 @endif
 
@@ -23,15 +40,6 @@ $admin_setting_url = route('admin.setting', ['slug' => $queue->slug ]);
   <li>Nomor antrian terakhir: <strong>{{ $queue->ticket_last }}</strong></li>
   <li>Batas berlaku antrian ini: <strong>{{ $queue->valid_until }}</strong></li>
   <li>Batas nomor antrian hari ini: <strong>{{ $queue->ticket_limit }}</strong></li>
-  <li>Tautan untuk antrian ini (untuk pengunjung): <strong>
-        <a target="_blank" href="{{ $guest_counter_url }}">{{ $guest_counter_url }}</a>
-  </strong></li>
-  <li>Tautan untuk halaman counter antrian ini (untuk penyedia layanan/pengelola): <strong>
-        <a href="{{ $admin_counter_url }}">{{ $admin_counter_url }}</a>
-  </strong></li>
-  <li>Tautan untuk halaman admin antrian ini (untuk penyedia layanan/pengelola): <strong>
-        <a href="{{ $admin_setting_url }}">{{ $admin_setting_url }}</a>
-  </strong></li>
 </ul>
 
 <h3 class="title is-3">Ubah setting antrian</h3>

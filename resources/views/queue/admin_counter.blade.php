@@ -28,6 +28,4 @@ $admin_url = route('admin.setting', ['slug' => $queue->slug ]);
     <button class="button is-medium is-info" {{ ($queue->ticket_last >= $queue->ticket_limit) ? 'disabled' : '' }}>Ambil nomor antrian baru</button>
 </form>
 
-<a class="button is-medium is-secondary" href="{{ $admin_url }}">Setting antrian</a>
-
 @endsection

@@ -57,6 +57,15 @@ class Queue extends Model
         return $this->hasMany(Ticket::class);
     }
 
+    public function isCurrentUserAdmin()
+    {
+        $sessionKey = self::generateSessionKey($this->slug);
+        return (
+            session($sessionKey) &&
+            session($sessionKey) >= Carbon::now()
+        );
+    }
+
     static function findBySlugQuery($slug)
     {
         return self::where([
