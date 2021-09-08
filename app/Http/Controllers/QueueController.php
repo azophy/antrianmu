@@ -66,11 +66,15 @@ class QueueController extends Controller
         return view('queue.admin_setting', compact('queue'));
     }
 
-    public function adminCounter($slug)
+    public function adminCounter($slug, Request $request)
     {
         $queue = Queue::findBySlugOrFail($slug);
 
-        return view('queue.admin_counter', compact('queue'));
+        if ($request->ajax()) {
+            return view('queue._admin_counter_display', compact('queue'));
+        } else {
+            return view('queue.admin_counter', compact('queue'));
+        }
     }
 
     public function adminNext($slug)
@@ -84,7 +88,7 @@ class QueueController extends Controller
         $queue->ticket_current++;
         $queue->save();
 
-        return redirect()->route('admin.counter', compact('slug'));
+        return view('queue._admin_counter_display', compact('queue'));
     }
 
 
@@ -112,8 +116,13 @@ class QueueController extends Controller
             'secret_code' => Ticket::generateSecretCode(),
         ]);
 
-        return redirect()->route('ticket.view', [
-            'code' => $ticket->secret_code,
-        ]);
+        if ($request->ajax() && $queue->isCurrentUserAdmin()) {
+            return view('ticket.view', compact('ticket', 'queue'))
+                ->renderSections()['content'];
+        } else {
+            return redirect()->route('ticket.view', [
+                'code' => $ticket->secret_code,
+            ]);
+        }
     }
 }

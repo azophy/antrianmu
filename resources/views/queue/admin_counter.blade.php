@@ -11,25 +11,9 @@ $counter_url = route('guest.counter', ['slug' => $queue->slug ]);
 $admin_url = route('admin.setting', ['slug' => $queue->slug ]);
 @endphp
 
-<div
-    class="notification is-primary has-text-centered is-clickable"
-    style="max-width: 300px;"
-    onclick="nextTicket()"
-    disabled
->
-    <p>Nomor antrian saat ini:</p>
-    <h1 class="title is-1">{{ $queue->ticket_current }}</h1>
-    <p>(klik tombol ini untuk ke nomor antrian berikutnya)</p>
-</div>
-
-<div
-    class="notification is-info has-text-centered is-clickable"
-    style="max-width: 300px;"
-    onclick="addTicket()"
->
-    <p>Nomor antrian terakhir:</p>
-    <h1 class="title is-1">{{ $queue->ticket_last }}</h1>
-    <p>(klik tombol ini untuk mengambil nomor antrian baru)</p>
+<div></div>
+<div id="counter-display">
+@include('queue._admin_counter_display', compact('queue'))
 </div>
 
 <ul>
@@ -40,21 +24,56 @@ $admin_url = route('admin.setting', ['slug' => $queue->slug ]);
   </strong></li>
 </ul>
 
+<div class="modal" id="ticket-modal">
+  <div class="modal-background"></div>
+  <div class="modal-content" id="ticket-modal-content">
+  </div>
+  <button class="modal-close is-large" aria-label="close"></button>
+</div>
+
 <script>
+var csrfToken = document.querySelector('meta[name="csrf-token"]').content
+var defaultHeader = {
+    'X-CSRF-TOKEN': csrfToken,
+    'X-Requested-With': 'XMLHttpRequest',
+}
+var processingContent = '<progress class="progress is-small is-primary" max="100">15%</progress><p>processing....</p>'
+
+function updateAdminCounter() {
+    var url = '{{ route('admin.counter', [ 'slug' => $queue->slug ]) }}'
+    fetch(url, {
+        method: 'GET',
+        headers: defaultHeader,
+    })
+        .then(r => r.text())
+        .then((content) => {
+            document.getElementById('counter-display').innerHTML = content
+        })
+}
+
 function nextTicket() {
-    document.getElementById('formNextTicket').submit();
+    var url = '{{ route('admin.next', [ 'slug' => $queue->slug ]) }}'
+    document.getElementById('counter-display').innerHTML = processingContent
+    fetch(url, {
+        method: 'POST',
+        headers: defaultHeader,
+    })
+    .then(() => updateAdminCounter())
 }
 function addTicket() {
-    document.getElementById('formAddTicket').submit();
-    setTimeout('location.reload();', 2000)
+    var url = '{{ route('guest.add', [ 'slug' => $queue->slug ]) }}'
+    document.getElementById('counter-display').innerHTML = processingContent
+    fetch(url, {
+        method: 'POST',
+        headers: defaultHeader,
+    })
+    .then(r => r.text())
+    .then((content) => {
+        document.getElementById('ticket-modal-content').innerHTML = content
+        document.getElementById('ticket-modal').classList.toggle('is-active');
+    })
+    .then(() => updateAdminCounter())
 }
 </script>
-
-<form id="formNextTicket" action="{{ route('admin.next', [ 'slug' => $queue->slug ]) }}" method="post">
-    @csrf
-</form>
-<form id="formAddTicket" action="{{ route('guest.add', [ 'slug' => $queue->slug ]) }}" method="post" target="_blank">
-    @csrf
-</form>
 
 @endsection

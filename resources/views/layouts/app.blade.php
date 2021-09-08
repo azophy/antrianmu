@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('page_title', config('app.name'))</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
   </head>
 <body>
 <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
@@ -110,6 +111,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // allow all modal to be able to be deleted
+  // ref: https://bulma.io/documentation/elements/notification/#javascript-example
+  (document.querySelectorAll('.modal .modal-close') || []).forEach(($close) => {
+     const $modal = $close.parentNode;
+
+     $close.addEventListener('click', () => {
+       $modal.classList.toggle('is-active');
+     });
+   });
 });
 </script>
 </body>
