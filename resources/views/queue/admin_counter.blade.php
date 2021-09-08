@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('common.package_type_notification', compact('queue'))
+
 <h1 class="title">{{ $queue->title }}</h1>
 
 @php
@@ -9,9 +11,28 @@ $counter_url = route('guest.counter', ['slug' => $queue->slug ]);
 $admin_url = route('admin.setting', ['slug' => $queue->slug ]);
 @endphp
 
+<div
+    class="notification is-primary has-text-centered is-clickable"
+    style="max-width: 300px;"
+    onclick="nextTicket()"
+    disabled
+>
+    <p>Nomor antrian saat ini:</p>
+    <h1 class="title is-1">{{ $queue->ticket_current }}</h1>
+    <p>(klik tombol ini untuk ke nomor antrian berikutnya)</p>
+</div>
+
+<div
+    class="notification is-info has-text-centered is-clickable"
+    style="max-width: 300px;"
+    onclick="addTicket()"
+>
+    <p>Nomor antrian terakhir:</p>
+    <h1 class="title is-1">{{ $queue->ticket_last }}</h1>
+    <p>(klik tombol ini untuk mengambil nomor antrian baru)</p>
+</div>
+
 <ul>
-  <li>Nomor antrian saat ini: <strong>{{ $queue->ticket_current }}</strong></li>
-  <li>Nomor antrian terakhir: <strong>{{ $queue->ticket_last }}</strong></li>
   <li>Batas berlaku antrian ini: <strong>{{ $queue->valid_until }}</strong></li>
   <li>Batas nomor antrian hari ini: <strong>{{ $queue->ticket_limit }}</strong></li>
   <li>Tautan untuk antrian ini (untuk pengunjung): <strong>
@@ -19,13 +40,21 @@ $admin_url = route('admin.setting', ['slug' => $queue->slug ]);
   </strong></li>
 </ul>
 
-<form action="{{ route('admin.next', [ 'slug' => $queue->slug ]) }}" method="post">
+<script>
+function nextTicket() {
+    document.getElementById('formNextTicket').submit();
+}
+function addTicket() {
+    document.getElementById('formAddTicket').submit();
+    setTimeout('location.reload();', 2000)
+}
+</script>
+
+<form id="formNextTicket" action="{{ route('admin.next', [ 'slug' => $queue->slug ]) }}" method="post">
     @csrf
-    <button class="button is-medium is-primary" {{ ($queue->ticket_current >= $queue->ticket_last) ? 'disabled' : '' }}>Lanjutkan nomor antrian</button>
 </form>
-<form action="{{ route('guest.add', [ 'slug' => $queue->slug ]) }}" method="post" target="_blank" onsubmit="setTimeout('location.reload();', 2000)">
+<form id="formAddTicket" action="{{ route('guest.add', [ 'slug' => $queue->slug ]) }}" method="post" target="_blank">
     @csrf
-    <button class="button is-medium is-info" {{ ($queue->ticket_last >= $queue->ticket_limit) ? 'disabled' : '' }}>Ambil nomor antrian baru</button>
 </form>
 
 @endsection
