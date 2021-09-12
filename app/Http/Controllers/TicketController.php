@@ -8,6 +8,13 @@ use App\Models\Ticket;
 
 class TicketController extends Controller
 {
+    public function index()
+    {
+        return view('ticket.login', [
+            'isSearchTicketEnabled' => true,
+        ]);
+    }
+
     public function view($code, Request $request)
     {
         $ticket = Ticket::findByCodeQuery($code)

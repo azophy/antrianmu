@@ -18,7 +18,13 @@ Route::get('/', function () {
 });
 
 Route::post('/queue', 'App\Http\Controllers\QueueController@create')->name('queue.create');
+Route::get('/tiket/', 'App\Http\Controllers\TicketController@index')
+    ->name('ticket.index');
+Route::match(['get','post'], '/tiket/{code}', 'App\Http\Controllers\TicketController@view')
+    ->name('ticket.view')
+    ->middleware('captcha_session_valid:ticket_code_expire');
 
+// per-queue routing
 Route::post('/{slug}/admin/login', 'App\Http\Controllers\QueueController@adminLogin')->name('admin.login');
 
 Route::middleware(App\Http\Middleware\QueueAdminValidation::class)->group(function () {
@@ -31,6 +37,3 @@ Route::middleware(App\Http\Middleware\QueueAdminValidation::class)->group(functi
 Route::get('/{slug}/', 'App\Http\Controllers\QueueController@guestCounter')->name('guest.counter');
 Route::post('/{slug}/add', 'App\Http\Controllers\QueueController@guestAdd')->name('guest.add');
 
-Route::match(['get','post'], '/tiket/{code}', 'App\Http\Controllers\TicketController@view')
-    ->name('ticket.view')
-    ->middleware('captcha_session_valid:ticket_code_expire');
