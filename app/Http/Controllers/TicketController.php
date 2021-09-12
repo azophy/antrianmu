@@ -16,7 +16,11 @@ class TicketController extends Controller
             ;
 
         if (empty($ticket)) {
-            abort(404, "Maaf, tiket dengan kode '$code' tidak dapat ditemukan");
+            return view('ticket.login', [
+                'isSearchTicketEnabled' => true,
+            ])->withErrors([
+                'Not Found' => "Tiket dengan kode '$code' tidak dapat ditemukan",
+            ]);
         }
 
         return view('ticket.view', [

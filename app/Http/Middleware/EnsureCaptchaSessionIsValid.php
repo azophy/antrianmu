@@ -29,12 +29,12 @@ class EnsureCaptchaSessionIsValid
         }
 
         if (
-            !session($session_key) ||
-            session($session_key) < Carbon::now()
+            !session('nocaptcha') && (
+                !session($session_key) ||
+                session($session_key) < Carbon::now()
+            )
         ) {
-            return response()->view('ticket.login', [
-                'target' => $request->fullUrl(),
-            ]);
+            return response()->view('ticket.login');
         }
 
         return $next($request);
