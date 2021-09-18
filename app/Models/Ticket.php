@@ -50,16 +50,7 @@ class Ticket extends Model
     /* use naive prediction */
     public function getTurnPredictionAttribute()
     {
-        $currentTicket = $this->queue->getCurrentTicket();
-        if ($currentTicket == null) {
-            $turnLeft = $this->order;
-            $lastTurnTime = new Carbon($this->queue->meta['predicted_start']);
-        } else {
-            $turnLeft = $this->order - $currentTicket->order;
-            $lastTurnTime = $currentTicket->start_time;
-        }
-        $secondsLeft = $this->queue->meta['last_average'] * $turnLeft;
-        return $lastTurnTime->addSeconds($secondsLeft);
+        return $this->queue->calculateTurnPrediction($this->order);
     }
 
     static function findByCodeQuery($code)

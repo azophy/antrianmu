@@ -119,6 +119,32 @@ class Queue extends Model
         );
     }
 
+    /* calculate time giver order
+     * @return Carbon   Predicted time
+     */
+    public function calculateTurnPrediction($order)
+    {
+        if ($this->ticket_current == 0) {
+            $turnLeft = $order;
+            $lastTurnTime = new Carbon($this->meta['predicted_start']);
+        } else {
+            $currentTicket = $this->getCurrentTicket();
+            $turnLeft = $order - $currentTicket->order;
+            $lastTurnTime = $currentTicket->start_time;
+        }
+        $secondsLeft = $this->meta['last_average'] * $turnLeft;
+        return $lastTurnTime->addSeconds($secondsLeft);
+    }
+
+    /* get latest average as display-able string */
+    public function displayLastAverage()
+    {
+        $val = $this->meta['last_average'] / 60;
+        return ($val < 1.000) ?
+            'kurang dari 1 menit' :
+            (int) $val . ' menit' ;
+    }
+
     static function findBySlugQuery($slug)
     {
         return self::where([

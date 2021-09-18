@@ -43,13 +43,13 @@
         </nav>
 
         <br>
-        Perkiraan giliran: <strong>
+        Perkiraan waktu giliran: <strong>
             <time datetime="2016-1-1">{{ $ticket->turn_prediction->format('h:i') }}</time>
         </strong>
         <br>
-        Rata-rata per giliran:
+        Rata-rata lama per giliran:
         <strong>
-            <time>{{ $queue->meta['last_average'] }} detik</time>
+            <time>{{ $queue->displayLastAverage() }}</time>
         </strong>
         <br>
         <p>Tautan untuk tiket ini: </p>
