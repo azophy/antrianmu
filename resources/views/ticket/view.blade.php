@@ -43,7 +43,15 @@
         </nav>
 
         <br>
-        Perkiraan giliran: <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+        Perkiraan giliran: <strong>
+            <time datetime="2016-1-1">{{ $ticket->turn_prediction->format('h:i') }}</time>
+        </strong>
+        <br>
+        Rata-rata per giliran:
+        <strong>
+            <time>{{ $queue->meta['last_average'] }} detik</time>
+        </strong>
+        <br>
         <p>Tautan untuk tiket ini: </p>
         <a href="{{ route('ticket.view', ['code' => $ticket->secret_code ]) }}">
             {{ route('ticket.view', ['code' => $ticket->secret_code ]) }}

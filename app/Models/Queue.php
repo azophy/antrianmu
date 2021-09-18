@@ -17,6 +17,8 @@ class Queue extends Model
     const TYPE_BASIC = 2; // free registration
     const TYPE_PRO = 3;
 
+    const MIN_TURN_LENGTH = 1; // minimum elapsed time (in seconds) for it to be considered "not skipped"
+
     public $fillable = [
         'slug',
         'secret_code',
@@ -55,6 +57,57 @@ class Queue extends Model
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
+    }
+
+    public function getCurrentTicket()
+    {
+        return $this->tickets()
+                    ->where('order', $this->ticket_current)
+                    ->first();
+    }
+
+    public function createNextTicket()
+    {
+        $this->ticket_last++;
+        $this->save();
+
+        return Ticket::create([
+            'queue_id' => $this->id,
+            'order' => $this->ticket_last,
+            'secret_code' => Ticket::generateSecretCode(),
+        ]);
+    }
+
+    public function updateToNextTicket()
+    {
+        $queueMeta = $this->meta;
+
+        if ($this->ticket_current > 0) {
+            // count average processing time
+            $currentTicket = $this->getCurrentTicket();
+            $currentTicket->finish_time = Carbon::now();
+            $elapsed = $currentTicket->finish_time
+                            ->diffInSeconds($currentTicket->start_time);
+
+            if ($elapsed > self::MIN_TURN_LENGTH) {
+                $queueMeta['elapsed_valid_turn'] += $elapsed;
+                $queueMeta['num_valid_turn']++;
+                $queueMeta['last_average'] = $queueMeta['elapsed_valid_turn'] / $queueMeta['num_valid_turn'];
+            }
+
+            $currentTicket->save();
+        }
+
+        $this->ticket_current++;
+
+        if ($this->ticket_current <= $this->ticket_last) {
+            $currentTicket = $this->getCurrentTicket();
+            $currentTicket->start_time = Carbon::now();
+            $currentTicket->save();
+        }
+
+        $this->meta = $queueMeta;
+        $this->save();
     }
 
     public function isCurrentUserAdmin()
@@ -96,6 +149,13 @@ class Queue extends Model
             'secret_code' => self::generateSecretCode(),
             'title' => $slug,
             'valid_until' => Carbon::now()->addHours(24),
+            'meta' => [
+                'predicted_average' => 60, // prediction value. either configured by used or use result from previous day
+                'predicted_start' => Carbon::now()->hour(7)->minute(0)->second(0),
+                'elapsed_valid_turn' => 60, // use initial average as initial elapsed
+                'num_valid_turn' => 1, // extra offset for predicted initial average
+                'last_average' => 60,
+            ],
         ]);
     }
 

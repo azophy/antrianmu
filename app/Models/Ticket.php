@@ -23,9 +23,43 @@ class Ticket extends Model
         'meta',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'meta' => 'array',
+        'start_time' => 'datetime',
+        'finish_time' => 'datetime',
+    ];
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+    ];
+
     public function queue()
     {
         return $this->belongsTo(Queue::class);
+    }
+
+    /* use naive prediction */
+    public function getTurnPredictionAttribute()
+    {
+        $currentTicket = $this->queue->getCurrentTicket();
+        if ($currentTicket == null) {
+            $turnLeft = $this->order;
+            $lastTurnTime = new Carbon($this->queue->meta['predicted_start']);
+        } else {
+            $turnLeft = $this->order - $currentTicket->order;
+            $lastTurnTime = $currentTicket->start_time;
+        }
+        $secondsLeft = $this->queue->meta['last_average'] * $turnLeft;
+        return $lastTurnTime->addSeconds($secondsLeft);
     }
 
     static function findByCodeQuery($code)

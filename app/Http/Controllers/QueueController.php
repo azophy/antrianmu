@@ -85,8 +85,7 @@ class QueueController extends Controller
             abort(400, 'Sudah berada di ujung antrian');
         }
 
-        $queue->ticket_current++;
-        $queue->save();
+        $queue->updateToNextTicket();
 
         return view('queue._admin_counter_display', compact('queue'));
     }
@@ -107,14 +106,7 @@ class QueueController extends Controller
             abort(404, 'Maaf, nomor antrian hari ini sudah habis');
         }
 
-        $queue->ticket_last++;
-        $queue->save();
-
-        $ticket = Ticket::create([
-            'queue_id' => $queue->id,
-            'order' => $queue->ticket_last,
-            'secret_code' => Ticket::generateSecretCode(),
-        ]);
+        $ticket = $queue->createNextTicket();
 
         if ($request->ajax() && $queue->isCurrentUserAdmin()) {
             return view('ticket.view', compact('ticket', 'queue'))
