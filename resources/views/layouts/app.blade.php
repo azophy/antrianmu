@@ -121,6 +121,22 @@ document.addEventListener('DOMContentLoaded', () => {
      });
    });
 });
+
+// update timer on ticket view page
+function updateTimeLeft() {
+    var now = new Date().getTime() / 1000
+    console.log('update time left: ' + now)
+
+    var time_prediction = document.getElementById('time_prediction')
+    if (time_prediction == null) return
+
+    var time_left =  Math.floor( (time_prediction.value - now) / 60 )
+    console.log('time_left : ' + time_left)
+
+    document.getElementById('time_left_prediction').innerText = '(' + time_left + ' menit lagi)'
+}
+var timer = setInterval(updateTimeLeft, 1000);
+
 </script>
 </body>
 </html>

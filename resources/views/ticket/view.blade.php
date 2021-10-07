@@ -45,6 +45,8 @@
         <br>
         Perkiraan waktu giliran: <strong>
             <time datetime="2016-1-1">{{ $ticket->turn_prediction->format('h:i') }}</time>
+            <span id="time_left_prediction"></span>
+            <input type="hidden" id="time_prediction" value="{{ $ticket->turn_prediction->timestamp }}">
         </strong>
         <br>
         Rata-rata lama per giliran:
