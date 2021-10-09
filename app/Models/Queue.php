@@ -176,11 +176,6 @@ class Queue extends Model
 
     static function createBySlug($slug)
     {
-        if (Queue::findBySlugQuery($slug)->exists()
-        || in_array($slug, self::RESERVED_SLUG_NAMES)) {
-            abort(400, "maaf antrian dengan nama '$slug' sudah ada");
-        }
-
         return self::create([
             'slug' => strtolower($slug),
             'secret_code' => self::generateSecretCode(),
