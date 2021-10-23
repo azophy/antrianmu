@@ -59,78 +59,112 @@
 <section class="section">
   <h1 class="title">Fitur</h1>
 
-  <div class="box">
-    <h2 class="title">Mudah digunakan</h2>
-    <p class="content">
-      <ul>
-          <li>Tidak perlu registrasi untuk mencoba</li>
-          <li>Tidak perlu install aplikasi</li>
-          <li>Tidak perlu beli alat/hardware</li>
-      </ul>
-    </p>
-  </div>
+    <div class="columns">
+        <div class="column">
+          <div class="box">
+            <h2 class="title">Mudah digunakan</h2>
+            <p class="content">
+              <ul>
+                  <li>Tidak perlu registrasi untuk mencoba</li>
+                  <li>Tidak perlu install aplikasi</li>
+                  <li>Tidak perlu beli alat/hardware</li>
+              </ul>
+            </p>
+          </div>
+        </div>
 
-  <div class="box">
-    <h2 class="title">Sesuai protokol kesehatan</h2>
-    <p class="content">
-      <ul>
-          <li>Prediksi waktu tunggu untuk user, sehingga pengunjung tidak perlu berkerumun di lokasi</li>
-          <li>Ambil nomor antrian mandiri bagi pengunjung, pengunjung cukup ke lokasi ketika nomor antriannya sudah akan dipanggil</li>
-          <li>Tidak perlu alat/hardware, meminimalkan kontak fisik</li>
-      </ul>
-    </p>
-  </div>
+        <div class="column">
+          <div class="box">
+            <h2 class="title">Sesuai protokol kesehatan</h2>
+            <p class="content">
+              <ul>
+                  <li>Prediksi waktu tunggu untuk user, sehingga pengunjung tidak perlu berkerumun di lokasi</li>
+                  <li>Ambil nomor antrian mandiri bagi pengunjung, pengunjung cukup ke lokasi ketika nomor antriannya sudah akan dipanggil</li>
+                  <li>Tidak perlu alat/hardware, meminimalkan kontak fisik</li>
+              </ul>
+            </p>
+          </div>
+        </div>
 
-  <div class="box">
-    <h2 class="title">Fitur spesial untuk perusahan (segera hadir)</h2>
-    <p class="content">
-      <ul>
-          <li>Menyediakan lebih dari 1 counter pelayanan</li>
-          <li>Membuat lebih dari 1 jenis antrian</li>
-          <li>Edit tampilan dan branding sesuai kebutuhan</li>
-      </ul>
-    </p>
-  </div>
+        <div class="column">
+          <div class="box">
+            <h2 class="title">Fitur spesial untuk perusahan (segera hadir)</h2>
+            <p class="content">
+              <ul>
+                  <li>Menyediakan lebih dari 1 counter pelayanan</li>
+                  <li>Membuat lebih dari 1 jenis antrian</li>
+                  <li>Edit tampilan dan branding sesuai kebutuhan</li>
+              </ul>
+            </p>
+          </div>
+        </div>
+    </div>
 
 </section>
 
 <section class="section">
   <h1 class="title">Paket Harga</h1>
 
-  <div class="card">
-    <header class="card-header">
-      <p class="card-header-title">
-        Percobaan
-      </p>
-    </header>
-    <div class="card-content">
-      <div class="content">
-        <strong>Gratis</strong>
-        <ul>
-            <li>Tidak perlu registrasi</li>
-            <li>Antrian berlaku hanya selama 1 hari</li>
-            <li>Jumlah nomor antrian maksimum 25</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+    <div class="columns">
+        <div class="column">
+          <div class="card">
+            <header class="card-header">
+              <p class="card-header-title">
+                Percobaan
+              </p>
+            </header>
+            <div class="card-content">
+              <div class="content">
+                <strong>Gratis</strong>
+                <ul>
+                    <li>Tidak perlu registrasi</li>
+                    <li>Antrian berlaku hanya selama 1 hari</li>
+                    <li>Jumlah nomor antrian maksimum 25</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
 
-  <div class="card">
-    <header class="card-header">
-      <p class="card-header-title">
-        Dasar (Segera Hadir)
-      </p>
-    </header>
-    <div class="card-content">
-      <div class="content">
-        <strong>Gratis, hanya butuh registrasi</strong>
-        <ul>
-            <li>Antrian berlaku selama 3 hari</li>
-            <li>Jumlah nomor antrian maksimum 50</li>
-        </ul>
-      </div>
+        <div class="column">
+          <div class="card">
+            <header class="card-header">
+              <p class="card-header-title">
+                Dasar (Segera Hadir)
+              </p>
+            </header>
+            <div class="card-content">
+              <div class="content">
+                <strong>Gratis, hanya butuh registrasi</strong>
+                <ul>
+                    <li>Antrian berlaku selama 3 hari</li>
+                    <li>Jumlah nomor antrian maksimum 50</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="card">
+            <header class="card-header">
+              <p class="card-header-title">
+                Premium (Segera Hadir)
+              </p>
+            </header>
+            <div class="card-content">
+              <div class="content">
+                <strong>Rp 1 Juta/bulan</strong>
+                <ul>
+                    <li>Antrian berlaku selamat paket aktif</li>
+                    <li>Jumlah nomor antrian maksimum 250</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
     </div>
-  </div>
 
 </section>
 
