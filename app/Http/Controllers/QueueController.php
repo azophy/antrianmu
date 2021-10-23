@@ -13,7 +13,16 @@ class QueueController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'slug' => [ 'required', 'regex:/^[a-zA-Z0-9_-]*$/' ],
+            'slug' => [
+                'required',
+                'regex:/^[a-zA-Z0-9_-]*$/',
+                function ($attribute, $slug, $fail) {
+                    if (Queue::findBySlugQuery($slug)->exists()
+                    || in_array($slug, Queue::RESERVED_SLUG_NAMES)) {
+                        $fail("Antrian dengan nama '$slug' sudah ada");
+                    }
+                },
+            ],
             'g-recaptcha-response' => 'required|captcha',
         ]);
 

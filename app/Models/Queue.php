@@ -19,6 +19,16 @@ class Queue extends Model
 
     const MIN_TURN_LENGTH = 1; // minimum elapsed time (in seconds) for it to be considered "not skipped"
 
+    const RESERVED_SLUG_NAMES = [
+        'tiket',
+        'ticket',
+        'tickets',
+        'queue',
+        'queues',
+        'antrian',
+        'antrianmu',
+    ];
+
     public $fillable = [
         'slug',
         'secret_code',
@@ -166,10 +176,6 @@ class Queue extends Model
 
     static function createBySlug($slug)
     {
-        if (Queue::findBySlugQuery($slug)->exists()) {
-            abort(400, "maaf antrian dengan nama '$slug' sudah ada");
-        }
-
         return self::create([
             'slug' => strtolower($slug),
             'secret_code' => self::generateSecretCode(),
